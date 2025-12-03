@@ -1,9 +1,14 @@
 (async () => {
-    // Get the URL of the current script to resolve the HTML file path relative to the script location
-    const scriptUrl = import.meta.url || document.currentScript.src;
+    // Get the URL of the current script to resolve file paths relative to the script location
+    const scriptUrl = document.currentScript.src;
     const scriptDirectory = scriptUrl.substring(0, scriptUrl.lastIndexOf('/'));
     const htmlUrl = `${scriptDirectory}/combobox.html`;
-    const html = await fetch(htmlUrl).then(data => data.text());
+    const cssUrl = `${scriptDirectory}/combobox.css`;
+    
+    const [html, css] = await Promise.all([
+        fetch(htmlUrl).then(data => data.text()),
+        fetch(cssUrl).then(data => data.text())
+    ]);
 
 class CustomCombobox extends HTMLElement {
 
@@ -34,8 +39,8 @@ class CustomCombobox extends HTMLElement {
         // Create a shadow DOM: The internal DOM structure for this element
         this.attachShadow({ mode: 'open' });
 
-        //adding the HTML obtained from the fetch call
-        this.#internals.shadowRoot.innerHTML = html;
+        // Inject CSS and HTML into the shadow DOM
+        this.#internals.shadowRoot.innerHTML = `<style>${css}</style>${html}`;
 
         // References to the shadow DOM elements
         this.#input = this.#internals.shadowRoot.getElementById('combo-input');
