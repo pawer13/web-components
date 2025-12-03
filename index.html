@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Combobox Web Component</title>
+</head>
+<style>
+    combo-box {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+    combo-box .dropdown {
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: white;
+        position: absolute;
+        z-index: 1000;
+        width: 200px;
+    }
+    combo-box .dropdown ul:hover {
+        background-color: #f0f0f0;
+    } 
+</style>
+
+<body>
+    <h2>Custom Combobox with Grouped Options</h2>
+    
+    <!-- Example 1: Using optgroups with HTML -->
+    <form id="formTest">
+        <label for="combo">Select a programming concept:</label>
+        <combo-box name="combo" id="combo" value="js">
+            <optgroup label="Frontend Languages">
+                <option value="js">JavaScript</option>
+                <option value="ts">TypeScript</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+            </optgroup>
+            <optgroup label="Backend Languages">
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+                <option value="csharp">C#</option>
+                <option value="node">Node.js</option>
+            </optgroup>
+            <optgroup label="Databases">
+                <option value="mysql">MySQL</option>
+                <option value="postgres">PostgreSQL</option>
+                <option value="mongo">MongoDB</option>
+            </optgroup>
+        </combo-box>
+        <input type="submit" value="Submit">
+    </form>
+    
+    <!-- Example 2: Programmatically set grouped options -->
+    <form id="formTest2" style="margin-top: 20px;">
+        <label for="combo2">Select a fruit:</label>
+        <combo-box name="combo2" id="combo2"></combo-box>
+        <input type="submit" value="Submit">
+    </form>
+    
+    <script async src="/combobox/combobox.js"></script>
+    <script>
+        // Wait for custom elements to be defined
+        customElements.whenDefined('combo-box').then(() => {
+            // Example 1: Form submission handling
+            document.getElementById('formTest').addEventListener('submit', event => {
+                event.preventDefault()
+                console.log('Form 1 - Selected value:', new FormData(event.target).get('combo'));
+            });
+
+            // Example 2: Programmatically setting grouped options
+            const combo2 = document.getElementById('combo2');
+            console.log('Setting options for combo2');
+            combo2.options = [
+                {
+                    label: "Citrus Fruits",
+                    isGroup: true,
+                    options: [
+                        { value: "orange", label: "Orange" },
+                        { value: "lemon", label: "Lemon" },
+                        { value: "lime", label: "Lime" },
+                        { value: "grapefruit", label: "Grapefruit" }
+                    ]
+                },
+                {
+                    label: "Tropical Fruits",
+                    isGroup: true,
+                    options: [
+                        { value: "mango", label: "Mango" },
+                        { value: "pineapple", label: "Pineapple" },
+                        { value: "papaya", label: "Papaya" },
+                        { value: "coconut", label: "Coconut" }
+                    ]
+                },
+                // Regular options (not grouped)
+                { value: "apple", label: "Apple" },
+                { value: "banana", label: "Banana" }
+            ];
+
+            document.getElementById('formTest2').addEventListener('submit', event => {
+                event.preventDefault()
+                console.log('Form 2 - Selected value:', new FormData(event.target).get('combo2'));
+            });
+        });
+    </script>
+</body>
+
+</html>
