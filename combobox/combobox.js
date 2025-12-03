@@ -1,5 +1,9 @@
 (async () => {
-    const html = await fetch('./combobox.html').then(data => data.text());
+    // Get the URL of the current script to resolve the HTML file path relative to the script location
+    const scriptUrl = import.meta.url || document.currentScript.src;
+    const scriptDirectory = scriptUrl.substring(0, scriptUrl.lastIndexOf('/'));
+    const htmlUrl = `${scriptDirectory}/combobox.html`;
+    const html = await fetch(htmlUrl).then(data => data.text());
 
 class CustomCombobox extends HTMLElement {
 
